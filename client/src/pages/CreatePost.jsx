@@ -18,9 +18,14 @@ export default function CreatePost() {
 
   const handleSubmit = (e) => {};
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSurpriseMe = () => {};
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt();
+    setForm({ ...form, prompt: randomPrompt });
+  };
 
   return (
     <section className="max-w-7xl mx-auto ">
@@ -46,7 +51,7 @@ export default function CreatePost() {
             type="text"
             name="prompt"
             placeholder="A plush toy robot siting against a yellow wall"
-            value={form.name}
+            value={form.prompt}
             handleChange={handleChange}
             isSurpriseMe
             handleSurpriseMe={handleSurpriseMe}
