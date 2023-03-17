@@ -20,7 +20,6 @@ app.use("/api/v1/dalle", dalleRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-console.log(process.env.MONGODB_URL);
 
 const server = async () => {
   try {
