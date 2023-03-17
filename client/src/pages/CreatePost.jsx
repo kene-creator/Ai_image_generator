@@ -14,9 +14,49 @@ export default function CreatePost() {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const generateImage = () => {};
+  const generateImage = async () => {
+    if (form.prompt) {
+      try {
+        setGeneratingImg(true);
+        const response = await fetch("http://localhost:8000/api/v1/dalle", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: form.prompt }),
+        });
+        const data = await response.json();
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+      } catch (error) {
+        alert(error);
+      } finally {
+        setGeneratingImg(false);
+      }
+    } else {
+      alert("Please enter a prompt");
+    }
+  };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/posts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        await response.json();
+        navigate("/");
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,7 +81,7 @@ export default function CreatePost() {
           <FormField
             labelName="Your name"
             type="text"
-            placeholder="John doe"
+            placeholder="John Doe"
             name="name"
             value={form.name}
             handleChange={handleChange}
@@ -82,7 +122,7 @@ export default function CreatePost() {
             type="button"
             onClick={generateImage}
             className={`text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5  ${
-              loading ? "sending-animation" : ""
+              generatingImg ? "sending-animation" : ""
             }`}
           >
             {generatingImg ? "Generating" : "Generate"}
@@ -94,7 +134,7 @@ export default function CreatePost() {
             others in the community
           </p>
           <button
-            type="sumit"
+            type="submit"
             className={`mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center  ${
               loading ? "sending-animation" : ""
             }`}
