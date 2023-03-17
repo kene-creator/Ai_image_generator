@@ -55,6 +55,8 @@ export default function CreatePost() {
       } finally {
         setLoading(false);
       }
+    } else {
+      alert("Please enter a prompt and generate an image");
     }
   };
 
@@ -76,7 +78,7 @@ export default function CreatePost() {
           and share them through community
         </p>
       </div>
-      <form className="mt-16 max-w-3xl" onClick={handleSubmit}>
+      <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <FormField
             labelName="Your name"
